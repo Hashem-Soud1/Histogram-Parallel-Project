@@ -1,79 +1,61 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include <iostream>
 #include <vector>
-#include <random>
 #include <chrono>
-#include <map>
-#include <fstream>
 
 using namespace std;
 
-const int MIN_RANGE_VAL = 0;
-const int MAX_RANGE_VAL = 10;
-const int VALUE_RANGE = MAX_RANGE_VAL - MIN_RANGE_VAL + 1;
+vector<vector<unsigned char>> image_data_2d;
+vector<int> histogram_Algorithm_data(256, 0);
+int image_width = 0;
+int image_height = 0;
 
-vector<int> data_array;
+void loadImage(const string &filename) {
+    int channels;
+    unsigned char *data = stbi_load(filename.c_str(), &image_width, &image_height, &channels, 1); 
+    if (!data) {
+        cerr << "Error loading image!" << endl;
+        exit(1);
+    }
 
-vector<int> histogram_Algorithm_data(VALUE_RANGE, 0);
+    image_data_2d.assign(image_height, vector<unsigned char>(image_width));
+    for (int r = 0; r < image_height; ++r) {
+        for (int c = 0; c < image_width; ++c) {
+            image_data_2d[r][c] = data[r * image_width + c];
+        }
+    }
 
-void sequentialHistogram(const vector<int> &arr)
-{
+    stbi_image_free(data);
+}
 
-    for (auto value : arr)
-    {
-        histogram_Algorithm_data[value - MIN_RANGE_VAL]++;
+void sequentialHistogram() {
+    for (int r = 0; r < image_height; ++r) {
+        for (int c = 0; c < image_width; ++c) {
+            histogram_Algorithm_data[image_data_2d[r][c]]++;
+        }
     }
 }
 
-void printHistogram()
-{
+int main() {
+    string image_filename = "image_test.jpg"; 
+    loadImage(image_filename);
 
-    for (int i = 0; i < VALUE_RANGE; ++i)
-    {
-        cout << "number " << (i + MIN_RANGE_VAL) << " : " << histogram_Algorithm_data[i] << " times" << endl;
-    }
-}
+    cout << "--- Sequential Histogram Calculation for Grayscale Image ---" << endl;
+    cout << "Image Size: " << image_width << "x" << image_height << endl;
+    cout << "Number of Threads: 1 (Sequential)\n";
 
-void loadArrayFromFile(const string &filename, vector<int> &arr)
-{
-    ifstream infile(filename);
-    arr.clear();
-    int number;
-    while (infile >> number)
-    {
-        arr.push_back(number);
-    }
-    infile.close();
-}
-
-int main()
-{
-
-    // string input_filename = "data_10.txt";
-    // string input_filename = "data_1k.txt";
-    // string input_filename = "data_100k.txt";
-    // string input_filename = "data_1M.txt";
-    // string input_filename = "data_50M.txt";
-    string input_filename = "data_100M.txt";
-
-    loadArrayFromFile(input_filename, data_array);
-
-
-    cout << endl
-         << "--- Sequential Histogram Calculation ---" << endl;
-    cout << "Array Size: " << data_array.size() << ", Value Range: [" << MIN_RANGE_VAL << ", " << MAX_RANGE_VAL << "]" << endl;
-    cout << "Number of Threads: " << 1 << endl;
     auto start_time = chrono::high_resolution_clock::now();
 
-    sequentialHistogram(data_array);
+    sequentialHistogram();
 
     auto end_time = chrono::high_resolution_clock::now();
-    chrono::duration<double> time_nedeed = end_time - start_time;
+    chrono::duration<double> time_needed = end_time - start_time;
 
-    cout << endl
-         << "Execution Time: " << time_nedeed.count() << "seconds" << endl
-         << endl;
+    cout << "\nExecution Time: " << time_needed.count() << " s\n" << endl;
 
-    printHistogram();
+ 
 
     return 0;
 }
