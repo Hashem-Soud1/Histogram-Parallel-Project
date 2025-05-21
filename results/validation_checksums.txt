@@ -1,8 +1,0 @@
-To ensure the correctness of the employed logic, the results for the first small input sizes were traced manually
- to ensure the correctness of the logic for both implementations of the sequential and parallel code. 
-
-Then the output of the sequential implementation was utilized as ground truth to compare with in order to measure 
-the accuracy of the parallel implementations
-
-Also, a function was invoked to verify that the total count of values in the final histogram data was the
-same as the total count of input elements.
