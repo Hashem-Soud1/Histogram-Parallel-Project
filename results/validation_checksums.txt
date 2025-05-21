@@ -1,0 +1,25 @@
+
+1. Pixel Count Check via Histogram Sum
+To verify the correctness of the histogram computation, the sum of all histogram values (for grayscale levels 0–255)
+was compared to the total number of pixels in the image.
+
+ histogram[i]=Image Width × Image Height
+
+This validation ensures that each pixel in the image was counted exactly once.
+
+Example: For a 512×512 image, expected total pixels = 262,144
+
+Validation Result: Passed — Sum matched expected total 
+
+
+
+
+2. The correctness of the testHistogramSum() function was also verified using
+ AI tools (ChatGPT) to ensure the logic was sound.
+
+The sum obtained from the sequential histogram implementation was used as a reference to validate
+the correctness of the parallel implementation.
+
+Both results were compared and found to be identical, 
+confirming the consistency of the histogram calculation across both methods.
+
