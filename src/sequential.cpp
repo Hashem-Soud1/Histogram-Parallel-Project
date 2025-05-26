@@ -97,7 +97,7 @@ int main() {
 
 
   
- //printHistogram();
+ printHistogram();
  
 
     return 0;

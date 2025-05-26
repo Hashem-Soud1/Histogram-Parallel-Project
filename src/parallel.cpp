@@ -48,8 +48,7 @@ void* parallelHistogram(void* arg) {
 // Function to load a grayscale image using stb_image
 // The image is loaded into a 2D vector
 // Each pixel value is stored in the vector
-// The image is expected to be in grayscale format
-bool loadGrayscaleImage(const string& filename) {
+bool loadImage(const string& filename) {
     int channels;
     unsigned char* img_data = stbi_load(filename.c_str(), &image_width, &image_height, &channels, 1); 
     if (!img_data) {
@@ -96,7 +95,9 @@ void testHistogramSum(const vector<int>& histogram, int expected_total_pixels) {
 
 
 int main() {
-    string image_path = "image_test.jpg"; 
+     // Load the image
+    string image_filename = "image_test.jpg"; 
+    loadImage(image_filename); 
 
     
 
@@ -150,6 +151,6 @@ int main() {
     // Test histogram sum
     testHistogramSum(final_histogram_result, image_width * image_height);
 
-   // printHistogram();
+   printHistogram();
     return 0;
 }
