@@ -56,6 +56,9 @@ bool loadImage(const string& filename) {
         return false;
     }
 
+    //convert the image data to a 2D vector
+    //because stb_image loads the image as a 1D array
+    //2d more efficient to compare between sequential and parallel implementations
     image_data_2d.assign(image_height, vector<unsigned char>(image_width));
     for (int r = 0; r < image_height; ++r) {
         for (int c = 0; c < image_width; ++c) {
