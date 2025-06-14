@@ -29,10 +29,10 @@ This project implements a parallel histogram calculation for grayscale images us
 
 ## 📊 Performance Results
 
-| Version         | Execution Time (s) | Threads | Total Pixels |
-| --------------- | ------------------ | ------- | ------------ |
-| Sequential      | 0.0481             | 1       | 18,902,034   |
-| OpenMP          | 0.0078             | 20      | 18,902,034   |
+| Version         | Execution Time (s) | Threads                                 | Total Pixels |
+| --------------- | ------------------ | --------------------------------------- | ------------ |
+| Sequential      | 0.0481             | 1                                       | 18,902,034   |
+| OpenMP          | 0.0078             | Automatically chosen (20 detected)      | 18,902,034   |
 
 ### ✅ Speedup:
 
@@ -64,10 +64,30 @@ This enables OpenMP to select an optimal thread count based on the available har
 ![](Project%202/screenshots/local_his.PNG)
 
 * **Incorrect Thread Handling:** Avoided hardcoding thread counts and used OpenMP's internal scheduler.
-  
-* **Load Balancing:** Achieving load balancing by parallelizing over image rows using OpenMP’s `for` directive.
 
-![](Project%202/screenshots/Load%20Balancing.png)
+![](Project%202/screenshots/Dynamic_thread_selection.PNG)
+  
+  
+* **Load Balancing:**Effective distribution of workload by dividing image rows evenly among threads via OpenMP’s for directive, minimizing idle time.
+
+![](Project%202/screenshots/Load%20Balancing.PNG)
+
+
+* **Complexity of 2D Data:** Converted the image data from 1D to 2D array format to better reflect real-world scenarios.  
+  This increases indexing complexity and affects cache behavior, highlighting the true benefits of parallelization.
+
+
+* **Data Structure Choice:** To efficiently store pixel counts for values 0-255, a vector<int> was used instead of a map<int,int>.
+                             This choice leverages constant-time indexing and improves cache locality.
+
+```cpp
+// Using vector<int> for histogram because pixel values are in [0..255]
+// This allows O(1) access and better cache performance than a map
+vector<int> histogram(256, 0);
+
+// If map was used, access would be O(log n) and more overhead
+// map<int, int> histogram_map;
+```
 
 ---
 
@@ -81,6 +101,11 @@ This enables OpenMP to select an optimal thread count based on the available har
 
 ### ⚡ OpenMP Result
 ![OpenMP Result](Project%202/screenshots/OpenMp_result.png)
+
+
+**The parallel output is bitwise identical to the sequential output.**
+
+
 
 ---
 
