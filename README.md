@@ -60,8 +60,14 @@ This enables OpenMP to select an optimal thread count based on the available har
 ## 🧩 Challenges and Solutions
 
 * **Race Condition:** Solved using private/local histograms for each thread and merging results after.
+  
+![](Project%202/screenshots/local_his.PNG)
+
 * **Incorrect Thread Handling:** Avoided hardcoding thread counts and used OpenMP's internal scheduler.
+  
 * **Load Balancing:** Achieving load balancing by parallelizing over image rows using OpenMP’s `for` directive.
+
+![](Project%202/screenshots/Load%20Balancing.png)
 
 ---
 
@@ -70,16 +76,17 @@ This enables OpenMP to select an optimal thread count based on the available har
 * The sum of all histogram values equals the total number of pixels.
 * Output verified to match the sequential implementation exactly.
 
----
+### 🐢 Sequential Result
+![Sequential Result](Project%202/screenshots/Sequential_result.png)
 
-## 🔗 Repository Link
-
-> Make sure this link points to the folder or branch where your OpenMP code is stored:
-
-[GitHub Repository – Project 2 Folder](https://github.com/your-username/your-repo-name/tree/main/project2)
+### ⚡ OpenMP Result
+![OpenMP Result](Project%202/screenshots/OpenMp_result.png)
 
 ---
 
-```
 
-أكيد، هيك ممكن يكون نص README كامل بالإنجليزي مع إضافة توضيح اختيار عدد الثريدات تلقائياً:
+
+
+
+
+
