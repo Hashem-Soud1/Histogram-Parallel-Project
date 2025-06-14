@@ -62,6 +62,7 @@ int main() {
     #pragma omp parallel
     {
         int tid = omp_get_thread_num();
+        // Each thread has its own local histogram
         vector<int>& local_hist = local_histograms[tid];
 
         #pragma omp for
