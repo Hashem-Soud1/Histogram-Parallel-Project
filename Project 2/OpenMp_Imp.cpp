@@ -14,6 +14,7 @@ int image_height = 0;
 vector<vector<unsigned char>> image_data_2d;
 vector<int> final_histogram_result(256, 0);
 
+// Function to load an image using stb_image
 bool loadImage(const string& filename) {
     int channels;
     unsigned char* img_data = stbi_load(filename.c_str(), &image_width, &image_height, &channels, 1);
@@ -22,15 +23,18 @@ bool loadImage(const string& filename) {
         return false;
     }
 
+    // convert the 1D image data to a 2D vector
     image_data_2d.assign(image_height, vector<unsigned char>(image_width));
     for (int r = 0; r < image_height; ++r)
         for (int c = 0; c < image_width; ++c)
             image_data_2d[r][c] = img_data[r * image_width + c];
 
+
     stbi_image_free(img_data);
     return true;
 }
 
+// Function to test if the histogram sum matches the total number of pixels
 void testHistogramSum(const vector<int>& histogram, int expected_total_pixels) {
     int sum = 0;
     for (int value : histogram) sum += value;
@@ -48,6 +52,7 @@ int main() {
     cout << "--- OpenMP Parallel Histogram ---" << endl;
     cout << "Image Size: " << image_width << "x" << image_height << endl;
 
+    
     int num_threads = 0;
     // Determine the number of threads to use
     #pragma omp parallel
@@ -55,6 +60,7 @@ int main() {
         #pragma omp single
         num_threads = omp_get_num_threads();
     }
+
     auto start_time = chrono::high_resolution_clock::now();
 
     vector<vector<int>> local_histograms(num_threads, vector<int>(256, 0));
