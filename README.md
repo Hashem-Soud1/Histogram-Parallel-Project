@@ -76,6 +76,9 @@ This enables OpenMP to select an optimal thread count based on the available har
 * **Complexity of 2D Data:** Converted the image data from 1D to 2D array format to better reflect real-world scenarios.  
   This increases indexing complexity and affects cache behavior, highlighting the true benefits of parallelization.
 
+  ![](Project%202/screenshots/convertto2d.PNG)
+
+
 
 * **Data Structure Choice:** To efficiently store pixel counts for values 0-255, a vector<int> was used instead of a map<int,int>.
                              This choice leverages constant-time indexing and improves cache locality.
@@ -108,6 +111,16 @@ vector<int> histogram(256, 0);
 
 
 ---
+
+---
+
+## 🧠 Conclusion
+
+This project demonstrated how parallelization using OpenMP can significantly accelerate histogram computation for large grayscale images. By avoiding race conditions, using efficient data structures, and relying on OpenMP's dynamic thread management, the program achieved over 6x speedup on a modern CPU.
+
+
+---
+
 
 
 
