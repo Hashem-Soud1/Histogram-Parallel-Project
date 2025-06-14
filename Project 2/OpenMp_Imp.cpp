@@ -1,17 +1,19 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb_image.h"// Include the stb_image header for image loading
 
 #include <iostream>
 #include <vector>
 #include <chrono>
 #include <omp.h>
-#include <cassert>
 
 using namespace std;
 
 int image_width = 0;
 int image_height = 0;
+
+// 2D vector to hold the image data
 vector<vector<unsigned char>> image_data_2d;
+// Final histogram result vector
 vector<int> final_histogram_result(256, 0);
 
 // Function to load an image using stb_image
@@ -54,7 +56,9 @@ int main() {
 
     
     int num_threads = 0;
+
     // Determine the number of threads to use
+    
     #pragma omp parallel
     {
         #pragma omp single
@@ -63,14 +67,18 @@ int main() {
 
     auto start_time = chrono::high_resolution_clock::now();
 
+    //initialize the local histograms for each thread
     vector<vector<int>> local_histograms(num_threads, vector<int>(256, 0));
 
     #pragma omp parallel
     {
-        int tid = omp_get_thread_num();
+        int tid = omp_get_thread_num();// Get the thread ID
+
         // Each thread has its own local histogram
         vector<int>& local_hist = local_histograms[tid];
 
+        // Compute final histogram for each pixel in the image
+        //use OpenMP (for) to parallelize the loop
         #pragma omp for
         for (int r = 0; r < image_height; ++r) {
             for (int c = 0; c < image_width; ++c) {
@@ -87,11 +95,13 @@ int main() {
     }
 
     auto end_time = chrono::high_resolution_clock::now();
+
     chrono::duration<double> time_needed = end_time - start_time;
 
     cout << "Execution Time (OpenMP): " << time_needed.count() << " s\n";
     cout << "Number of Threads: " << num_threads << endl;
 
     testHistogramSum(final_histogram_result, image_width * image_height);
+    
     return 0;
 }
